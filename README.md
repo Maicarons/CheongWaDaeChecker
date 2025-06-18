@@ -2,6 +2,10 @@
 
 A multilingual web application for checking available reservation times for Cheong Wa Dae (Blue House) tours in South Korea.
 
+
+
+![screenshot](image.png)
+
 ## Features ✨
 
 - **Multilingual Support**: English, Korean, and Chinese interfaces
