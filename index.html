@@ -475,7 +475,7 @@
             // 查询单个日期的预约情况
             async function fetchSingleDate(date) {
                 try {
-                    const corsProxy = 'https://cors-anywhere.ramrod.workers.dev/?url=';
+                    const corsProxy = 'https://api.allorigins.win/get?url=';
                     const targetUrl = `https://opencheongwadae.kr/eng/reservation/previewList?standardDate=${date.dateStr}`;
                     const url = corsProxy + encodeURIComponent(targetUrl);
             
