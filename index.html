@@ -545,8 +545,8 @@
                     
                     dateCard.innerHTML = `
                         <div class="date-header">
-                            <span>${dateInfo。date}</span>
-                            <span>${dateInfo。visitnos.length}${resources.result.available}</span>
+                            <span>${dateInfo.date}</span>
+                            <span>${dateInfo.visitnos.length}${resources.result.available}</span>
                         </div>
                         <div class="visitno-list">
                             ${visitnoBadges}
@@ -584,7 +584,7 @@
                     resultsContainer.innerHTML = `
                         <div style="text-align: center; width: 100%; color: var(--danger-color);">
                             <i class="fas fa-exclamation-triangle"></i>
-                            <p>${i18nResources[currentLanguage]。status.loading}</p>
+                            <p>${i18nResources[currentLanguage].status.loading}</p>
                         </div>
                     `;
                 } finally {
