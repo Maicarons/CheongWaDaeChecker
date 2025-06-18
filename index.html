@@ -473,22 +473,19 @@
             }
 
             // 查询单个日期的预约情况
-            async function fetchSingleDate(date) {
+           async function fetchSingleDate(date) {
                 try {
+                    const workerProxy = 'https://cors-proxy.maicarons2023.workers.dev/';
                     const targetUrl = `https://opencheongwadae.kr/eng/reservation/previewList?standardDate=${date.dateStr}`;
-                    const corsUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+                    const url = `${workerProxy}?url=${encodeURIComponent(targetUrl)}`;
             
-                    const response = await fetch(corsUrl);
+                    const response = await fetch(url);
                     if (!response.ok) {
-                        throw new Error(`Network response was not ok. Status: ${response.status}`);
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
             
-                    const wrappedData = await response.json();
+                    const data = await response.json();
             
-                    // allorigins 会返回一个 JSON 包裹的字符串内容，需要先解析 JSON 字符串
-                    const data = JSON.parse(wrappedData.contents);
-            
-                    // 提取可预约的 visitno
                     const availableVisitnos = data
                         .filter(slot => slot.reservationCnt > 0)
                         .map(slot => slot.visitno);
@@ -506,6 +503,7 @@
                     };
                 }
             }
+
             
 
 
