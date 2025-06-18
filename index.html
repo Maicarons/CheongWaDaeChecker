@@ -476,7 +476,14 @@
             async function fetchSingleDate(date) {
                 try {
                     const url = `https://opencheongwadae.kr/eng/reservation/previewList?standardDate=${date.dateStr}`;
-                    const response = await fetch(url);
+                    
+                    const response = await fetch(url, {
+                        mode: 'cors', // 尝试CORS模式
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    });
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
