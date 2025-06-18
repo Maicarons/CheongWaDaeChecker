@@ -475,27 +475,27 @@
             // 查询单个日期的预约情况
             async function fetchSingleDate(date) {
                 try {
-                    const url = `https://opencheongwadae.kr/eng/reservation/previewList?standardDate=${date.dateStr}`;
-                    
+                    const corsProxy = 'https://cors-anywhere.ramrod.workers.dev/';
+                    const targetUrl = `https://opencheongwadae.kr/eng/reservation/previewList?standardDate=${date.dateStr}`;
+                    const url = corsProxy + targetUrl;
+            
                     const response = await fetch(url, {
-                        mode: 'cors', // 尝试CORS模式
                         headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
+                            'X-Requested-With': 'XMLHttpRequest'
                         }
                     });
-                    
+            
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                    
+            
                     const data = await response.json();
-                    
+            
                     // 提取可预约的visitno
                     const availableVisitnos = data
                         .filter(slot => slot.reservationCnt > 0)
                         .map(slot => slot.visitno);
-                    
+            
                     return {
                         date: date.formattedDate,
                         visitnos: availableVisitnos
@@ -509,6 +509,7 @@
                     };
                 }
             }
+
 
             // 显示结果
             function displayResults(results) {
