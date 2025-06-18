@@ -13,7 +13,7 @@ A multilingual web application for checking available reservation times for Cheo
 ## How to Use 🚀
 
 1. **Access the Tool**:
-   - Live Demo: [https://maicarons.github.io/cheongwadae-checker/]
+   - Live Demo: <https://maicarons.github.io/CheongWaDaeChecker/>
    - Or clone this repository and open `index.html` in your browser
 
 2. **Check Availability**:
