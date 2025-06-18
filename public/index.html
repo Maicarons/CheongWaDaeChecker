@@ -1,608 +1,663 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cheong Wa Dae Tour Reservation Checker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --primary-color: #1a5fb4;
-            --secondary-color: #3584e4;
-            --success-color: #26a269;
-            --warning-color: #cd9309;
-            --danger-color: #e01b24;
-            --light-color: #f6f5f4;
-            --dark-color: #241f31;
-            --text-color: #1e1e1e;
-            --bg-color: #ffffff;
-            --card-bg: #fafafa;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
+      :root {
+        --primary-color: #1a5fb4;
+        --secondary-color: #3584e4;
+        --success-color: #26a269;
+        --warning-color: #cd9309;
+        --danger-color: #e01b24;
+        --light-color: #f6f5f4;
+        --dark-color: #241f31;
+        --text-color: #1e1e1e;
+        --bg-color: #ffffff;
+        --card-bg: #fafafa;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Noto Sans SC', sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            padding: 20px;
-        }
+      body {
+        font-family: "Noto Sans SC", sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        padding: 20px;
+      }
 
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        color: var(--primary-color);
+        position: relative;
+        display: inline-block;
+      }
+
+      h1::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        border-radius: 2px;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 30px;
+        margin-bottom: 30px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn {
+        display: inline-block;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(26, 95, 180, 0.2);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(26, 95, 180, 0.3);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .btn i {
+        margin-right: 8px;
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #666, #999);
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(26, 95, 180, 0.2);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s ease-in-out infinite;
+        margin: 0 auto 15px;
+      }
+
+      .results-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+      }
+
+      .date-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--primary-color);
+      }
+
+      .date-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .date-header {
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .visitno-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .visitno-badge {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      .no-availability {
+        color: #888;
+        font-style: italic;
+      }
+
+      .status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        background-color: var(--light-color);
+        border-radius: 8px;
+      }
+
+      .status-item {
+        display: flex;
+        align-items: center;
+      }
+
+      .status-item i {
+        margin-right: 8px;
+        color: var(--primary-color);
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 50px;
+        color: #777;
+        font-size: 0.9rem;
+      }
+
+      .language-selector {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .lang-btn {
+        background: none;
+        border: 1px solid #ddd;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .lang-btn:hover {
+        background: #f0f0f0;
+      }
+
+      .lang-btn.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+
+      .reservation-btn-container {
+        text-align: center;
+        margin-top: 30px;
+        display: none;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeIn 1s ease-in-out;
+          padding: 15px;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-            position: relative;
-            display: inline-block;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            border-radius: 2px;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            padding: 30px;
-            margin-bottom: 30px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(26, 95, 180, 0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(26, 95, 180, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn i {
-            margin-right: 8px;
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #666, #999);
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(26, 95, 180, 0.2);
-            border-radius: 50%;
-            border-top-color: var(--primary-color);
-            animation: spin 1s ease-in-out infinite;
-            margin: 0 auto 15px;
+          font-size: 2rem;
         }
 
         .results-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .date-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .date-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .date-header {
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .visitno-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .visitno-badge {
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .no-availability {
-            color: #888;
-            font-style: italic;
-        }
-
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 10px 15px;
-            background-color: var(--light-color);
-            border-radius: 8px;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .status-item i {
-            margin-right: 8px;
-            color: var(--primary-color);
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 50px;
-            color: #777;
-            font-size: 0.9rem;
+          grid-template-columns: 1fr;
         }
 
         .language-selector {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
+          position: static;
+          justify-content: center;
+          margin-bottom: 20px;
         }
+      }
 
-        .lang-btn {
-            background: none;
-            border: 1px solid #ddd;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+      /* Korean font style */
+      body.korean {
+        font-family: "Noto Sans KR", sans-serif;
+      }
 
-        .lang-btn:hover {
-            background: #f0f0f0;
-        }
-
-        .lang-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .reservation-btn-container {
-            text-align: center;
-            margin-top: 30px;
-            display: none;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .results-container {
-                grid-template-columns: 1fr;
-            }
-
-            .language-selector {
-                position: static;
-                justify-content: center;
-                margin-bottom: 20px;
-            }
-        }
-
-        /* Korean font style */
-        body.korean {
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-
-        /* Chinese font style */
-        body.chinese {
-            font-family: 'Noto Sans SC', sans-serif;
-        }
+      /* Chinese font style */
+      body.chinese {
+        font-family: "Noto Sans SC", sans-serif;
+      }
     </style>
-</head>
-<body class="english">
+  </head>
+  <body class="english">
     <div class="language-selector">
-        <button class="lang-btn" data-lang="english">English</button>
-        <button class="lang-btn" data-lang="korean">한국어</button>
-        <button class="lang-btn" data-lang="chinese">中文</button>
+      <button class="lang-btn" data-lang="english">English</button>
+      <button class="lang-btn" data-lang="korean">한국어</button>
+      <button class="lang-btn" data-lang="chinese">中文</button>
     </div>
 
     <div class="container">
-        <header>
-            <h1 data-i18n="title">Cheong Wa Dae Tour Reservation Checker</h1>
-            <p class="subtitle" data-i18n="subtitle">Check available reservation times for the next 30 days</p>
-        </header>
+      <header>
+        <h1 data-i18n="title">Cheong Wa Dae Tour Reservation Checker</h1>
+        <p class="subtitle" data-i18n="subtitle">
+          Check available reservation times for the next 30 days
+        </p>
+      </header>
 
-        <div class="card">
-            <div class="status-bar">
-                <div class="status-item">
-                    <i class="fas fa-info-circle"></i>
-                    <span data-i18n="status.instruction">Click the button below to start checking</span>
-                </div>
-                <div class="status-item" id="last-updated">
-                    <i class="far fa-clock"></i>
-                    <span data-i18n="status.lastUpdated">Not checked yet</span>
-                </div>
-            </div>
-
-            <button id="fetch-btn" class="btn">
-                <i class="fas fa-search"></i> <span data-i18n="button.check">Check Available Times</span>
-            </button>
-
-            <div id="loading" class="loading">
-                <div class="spinner"></div>
-                <p data-i18n="status.loading">Checking reservation data, please wait...</p>
-            </div>
+      <div class="card">
+        <div class="status-bar">
+          <div class="status-item">
+            <i class="fas fa-info-circle"></i>
+            <span data-i18n="status.instruction"
+              >Click the button below to start checking</span
+            >
+          </div>
+          <div class="status-item" id="last-updated">
+            <i class="far fa-clock"></i>
+            <span data-i18n="status.lastUpdated">Not checked yet</span>
+          </div>
         </div>
 
-        <div id="results-container" class="results-container">
-            <!-- 结果将在这里动态生成 -->
-            <div class="no-results" style="text-align: center; width: 100%; color: #888; font-style: italic;">
-                <span data-i18n="status.noData">No data available, please click the button above to check</span>
-            </div>
-        </div>
+        <button id="fetch-btn" class="btn">
+          <i class="fas fa-search"></i>
+          <span data-i18n="button.check">Check Available Times</span>
+        </button>
 
-        <div id="reservation-btn-container" class="reservation-btn-container">
-            <a href="https://opencheongwadae.kr/eng/reservation/form?menuId=MENU003010300000000#" target="_blank" class="btn btn-secondary">
-                <i class="fas fa-external-link-alt"></i> <span data-i18n="button.reserve">Go to Reservation Page</span>
-            </a>
+        <div id="loading" class="loading">
+          <div class="spinner"></div>
+          <p data-i18n="status.loading">
+            Checking reservation data, please wait...
+          </p>
         </div>
+      </div>
 
-        <div class="footer">
-            <p data-i18n="footer.source">Data source: Official Cheong Wa Dae Open Tour Website</p>
-            <p data-i18n="footer.copyright">© 2023 Cheong Wa Dae Reservation Checker - Unofficial Service</p>
+      <div id="results-container" class="results-container">
+        <!-- 결과将在这里动态生成 -->
+        <div
+          class="no-results"
+          style="
+            text-align: center;
+            width: 100%;
+            color: #888;
+            font-style: italic;
+          "
+        >
+          <span data-i18n="status.noData"
+            >No data available, please click the button above to check</span
+          >
         </div>
+      </div>
+
+      <div id="reservation-btn-container" class="reservation-btn-container">
+        <a
+          href="https://opencheongwadae.kr/eng/reservation/form?menuId=MENU003010300000000#"
+          target="_blank"
+          class="btn btn-secondary"
+        >
+          <i class="fas fa-external-link-alt"></i>
+          <span data-i18n="button.reserve">Go to Reservation Page</span>
+        </a>
+      </div>
+
+      <div class="footer">
+        <p data-i18n="footer.source">
+          Data source: Official Cheong Wa Dae Open Tour Website
+        </p>
+        <p data-i18n="footer.copyright">
+          © 2023 Cheong Wa Dae Reservation Checker - Unofficial Service
+        </p>
+      </div>
     </div>
 
     <script>
-        // 多语言资源
-        const i18nResources = {
-            english: {
-                "title": "Cheong Wa Dae Tour Reservation Checker",
-                "subtitle": "Check available reservation times for the next 30 days",
-                "status.instruction": "Click the button below to start checking",
-                "status.lastUpdated": "Not checked yet",
-                "status.loading": "Checking reservation data, please wait...",
-                "status.noData": "No data available, please click the button above to check",
-                "status.noAvailability": "No available times in the next 30 days",
-                "button.check": "Check Available Times",
-                "button.reserve": "Go to Reservation Page",
-                "footer.source": "Data source: Official Cheong Wa Dae Open Tour Website",
-                "footer.copyright": "© 2025 Maicarons",
-                "result.available": "time slots available",
-                "lastUpdated": "Last updated:"
-            },
-            korean: {
-                "title": "청와대 개방 관람 예약 확인",
-                "subtitle": "향후 30일간의 예약 가능 시간 확인",
-                "status.instruction": "아래 버튼을 클릭하여 확인 시작",
-                "status.lastUpdated": "아직 확인하지 않음",
-                "status.loading": "예약 데이터 확인 중, 잠시 기다려 주세요...",
-                "status.noData": "데이터가 없습니다. 위의 버튼을 클릭하여 확인하세요",
-                "status.noAvailability": "향후 30일 내 예약 가능 시간 없음",
-                "button.check": "예약 가능 시간 확인",
-                "button.reserve": "예약 페이지로 이동",
-                "footer.source": "데이터 출처: 청와대 개방 관람 공식 웹사이트",
-                "footer.copyright": "© 2025 Maicarons",
-                "result.available": "개의 예약 가능 시간",
-                "lastUpdated": "마지막 업데이트:"
-            },
-            chinese: {
-                "title": "青瓦台开放参观预约查询",
-                "subtitle": "查询未来30天内可预约时间",
-                "status.instruction": "点击下方按钮开始查询",
-                "status.lastUpdated": "尚未查询",
-                "status.loading": "正在查询预约数据，请稍候...",
-                "status.noData": "尚无数据，请点击上方按钮查询",
-                "status.noAvailability": "未来30天内没有可预约时间",
-                "button.check": "查询可预约时间",
-                "button.reserve": "前往预约页面",
-                "footer.source": "数据来源: 青瓦台开放参观官方网站",
-                "footer.copyright": "© 2025 Maicarons",
-                "result.available": "个时段可预约",
-                "lastUpdated": "最后更新:"
-            }
-        };
+      // 多语言资源
+      const i18nResources = {
+        english: {
+          title: "Cheong Wa Dae Tour Reservation Checker",
+          subtitle: "Check available reservation times for the next 30 days",
+          "status.instruction": "Click the button below to start checking",
+          "status.lastUpdated": "Not checked yet",
+          "status.loading": "Checking reservation data, please wait...",
+          "status.noData":
+            "No data available, please click the button above to check",
+          "status.noAvailability": "No available times in the next 30 days",
+          "button.check": "Check Available Times",
+          "button.reserve": "Go to Reservation Page",
+          "footer.source":
+            "Data source: Official Cheong Wa Dae Open Tour Website",
+          "footer.copyright": "© 2025 Maicarons",
+          "result.available": "time slots available",
+          lastUpdated: "Last updated:",
+        },
+        korean: {
+          title: "청와대 개방 관람 예약 확인",
+          subtitle: "향후 30일간의 예약 가능 시간 확인",
+          "status.instruction": "아래 버튼을 클릭하여 확인 시작",
+          "status.lastUpdated": "아직 확인하지 않음",
+          "status.loading": "예약 데이터 확인 중, 잠시 기다려 주세요...",
+          "status.noData": "데이터가 없습니다. 위의 버튼을 클릭하여 확인하세요",
+          "status.noAvailability": "향후 30일 내 예약 가능 시간 없음",
+          "button.check": "예약 가능 시간 확인",
+          "button.reserve": "예약 페이지로 이동",
+          "footer.source": "데이터 출처: 청와대 개방 관람 공식 웹사이트",
+          "footer.copyright": "© 2025 Maicarons",
+          "result.available": "개의 예약 가능 시간",
+          lastUpdated: "마지막 업데이트:",
+        },
+        chinese: {
+          title: "青瓦台开放参观预约查询",
+          subtitle: "查询未来30天内可预约时间",
+          "status.instruction": "点击下方按钮开始查询",
+          "status.lastUpdated": "尚未查询",
+          "status.loading": "正在查询预约数据，请稍候...",
+          "status.noData": "尚无数据，请点击上方按钮查询",
+          "status.noAvailability": "未来30天内没有可预约时间",
+          "button.check": "查询可预约时间",
+          "button.reserve": "前往预约页面",
+          "footer.source": "数据来源: 青瓦台开放参观官方网站",
+          "footer.copyright": "© 2025 Maicarons",
+          "result.available": "个时段可预约",
+          lastUpdated: "最后更新:",
+        },
+      };
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const fetchBtn = document.getElementById('fetch-btn');
-            const loadingElement = document.getElementById('loading');
-            const resultsContainer = document.getElementById('results-container');
-            const lastUpdatedElement = document.getElementById('last-updated').querySelector('span');
-            const reservationBtnContainer = document.getElementById('reservation-btn-container');
-            const langButtons = document.querySelectorAll('.lang-btn');
-            
-            let currentLanguage = 'english';
-            
-            // 初始化语言
-            function initLanguage() {
-                // 检查本地存储中的语言偏好
-                const savedLang = localStorage.getItem('blueHouseLang');
-                if (savedLang && i18nResources[savedLang]) {
-                    setLanguage(savedLang);
-                } else {
-                    setLanguage('english');
-                }
-            }
-            
-            // 设置语言
-            function setLanguage(lang) {
-                currentLanguage = lang;
-                document.body.className = lang;
-                
-                // 更新按钮状态
-                langButtons.forEach(btn => {
-                    if (btn.dataset.lang === lang) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
-                });
-                
-                // 更新文本内容
-                const resources = i18nResources[lang];
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    if (resources[key]) {
-                        el.textContent = resources[key];
-                    }
-                });
-                
-                // 保存语言偏好
-                localStorage.setItem('blueHouseLang', lang);
-            }
-            
-            // 语言切换按钮事件
-            langButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    setLanguage(this.dataset.lang);
-                });
-            });
-            
-            // 获取未来30天的日期
-            function getFutureDates(days = 30) {
-                const dates = [];
-                const today = new Date();
-                
-                for (let i = 0; i < days; i++) {
-                    const date = new Date();
-                    date.setDate(today.getDate() + i);
-                    
-                    const dateStr = formatDate(date, 'yyyyMMdd');
-                    const formattedDate = formatDate(date, 'yyyy-MM-dd');
-                    
-                    dates.push({ dateStr, formattedDate });
-                }
-                
-                return dates;
-            }
+      document.addEventListener("DOMContentLoaded", function () {
+        const fetchBtn = document.getElementById("fetch-btn");
+        const loadingElement = document.getElementById("loading");
+        const resultsContainer = document.getElementById("results-container");
+        const lastUpdatedElement = document
+          .getElementById("last-updated")
+          .querySelector("span");
+        const reservationBtnContainer = document.getElementById(
+          "reservation-btn-container"
+        );
+        const langButtons = document.querySelectorAll(".lang-btn");
 
-            // 格式化日期
-            function formatDate(date, format) {
-                const pad = num => num.toString().padStart(2, '0');
-                
-                return format
-                    .replace('yyyy', date.getFullYear())
-                    .replace('MM', pad(date.getMonth() + 1))
-                    .replace('dd', pad(date.getDate()));
-            }
+        let currentLanguage = "english";
 
-            // 查询单个日期的预约情况
-           async function fetchSingleDate(date) {
-                try {
-                    const workerProxy = 'https://cors-proxy.maicarons2023.workers.dev/';
-                    const targetUrl = `https://opencheongwadae.kr/eng/reservation/previewList?standardDate=${date.dateStr}`;
-                    const url = `${workerProxy}?url=${encodeURIComponent(targetUrl)}`;
-            
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-            
-                    const data = await response.json();
-            
-                    const availableVisitnos = data
-                        .filter(slot => slot.reservationCnt > 0)
-                        .map(slot => slot.visitno);
-            
-                    return {
-                        date: date.formattedDate,
-                        visitnos: availableVisitnos
-                    };
-                } catch (error) {
-                    console.error(`Error checking ${date.formattedDate}:`, error);
-                    return {
-                        date: date.formattedDate,
-                        visitnos: [],
-                        error: true
-                    };
-                }
+        // 初始化语言
+        function initLanguage() {
+          // 检查本地存储中的语言偏好
+          const savedLang = localStorage.getItem("blueHouseLang");
+          if (savedLang && i18nResources[savedLang]) {
+            setLanguage(savedLang);
+          } else {
+            setLanguage("english");
+          }
+        }
+
+        // 设置语言
+        function setLanguage(lang) {
+          currentLanguage = lang;
+          document.body.className = lang;
+
+          // 更新按钮状态
+          langButtons.forEach((btn) => {
+            if (btn.dataset.lang === lang) {
+              btn.classList.add("active");
+            } else {
+              btn.classList.remove("active");
+            }
+          });
+
+          // 更新文本内容
+          const resources = i18nResources[lang];
+          document.querySelectorAll("[data-i18n]").forEach((el) => {
+            const key = el.getAttribute("data-i18n");
+            if (resources[key]) {
+              el.textContent = resources[key];
+            }
+          });
+
+          // 保存语言偏好
+          localStorage.setItem("blueHouseLang", lang);
+        }
+
+        // 语言切换按钮事件
+        langButtons.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            setLanguage(this.dataset.lang);
+          });
+        });
+
+        // 获取未来30天的日期
+        function getFutureDates(days = 30) {
+          const dates = [];
+          const today = new Date();
+
+          for (let i = 0; i < days; i++) {
+            const date = new Date();
+            date.setDate(today.getDate() + i);
+
+            const dateStr = formatDate(date, "yyyyMMdd");
+            const formattedDate = formatDate(date, "yyyy-MM-dd");
+
+            dates.push({ dateStr, formattedDate });
+          }
+
+          return dates;
+        }
+
+        // 格式化日期
+        function formatDate(date, format) {
+          const pad = (num) => num.toString().padStart(2, "0");
+
+          return format
+            .replace("yyyy", date.getFullYear())
+            .replace("MM", pad(date.getMonth() + 1))
+            .replace("dd", pad(date.getDate()));
+        }
+
+        // 查询单个日期的预约情况
+        async function fetchSingleDate(date) {
+          try {
+            const workerProxy =
+              "https://cheongwadaechecker.maicarons.cc/api/proxy";
+            const targetUrl = `https://opencheongwadae.kr/eng/reservation/previewList?standardDate=${date.dateStr}`;
+            const url = `${workerProxy}?url=${encodeURIComponent(targetUrl)}`;
+
+            const response = await fetch(url);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            
+            const data = await response.json();
 
+            const availableVisitnos = data
+              .filter((slot) => slot.reservationCnt > 0)
+              .map((slot) => slot.visitno);
 
-            // 显示结果
-            function displayResults(results) {
-                // 过滤出有可用预约的日期
-                const availableDates = results.filter(r => r.visitnos.length > 0);
-                
-                // 更新最后更新时间
-                const now = new Date();
-                const resources = i18nResources[currentLanguage];
-                lastUpdatedElement.textContent = `${resources.lastUpdated} ${now.toLocaleString()}`;
-                
-                // 清空结果容器
-                resultsContainer.innerHTML = '';
-                
-                if (availableDates.length === 0) {
-                    resultsContainer.innerHTML = `
+            return {
+              date: date.formattedDate,
+              visitnos: availableVisitnos,
+            };
+          } catch (error) {
+            console.error(`Error checking ${date.formattedDate}:`, error);
+            return {
+              date: date.formattedDate,
+              visitnos: [],
+              error: true,
+            };
+          }
+        }
+
+        // 显示结果
+        function displayResults(results) {
+          // 过滤出有可用预约的日期
+          const availableDates = results.filter((r) => r.visitnos.length > 0);
+
+          // 更新最后更新时间
+          const now = new Date();
+          const resources = i18nResources[currentLanguage];
+          lastUpdatedElement.textContent = `${
+            resources["lastUpdated"]
+          } ${now.toLocaleString()}`;
+
+          // 클어 결과 컨테이너
+          resultsContainer.innerHTML = "";
+
+          if (availableDates.length === 0) {
+            resultsContainer.innerHTML = `
                         <div style="text-align: center; width: 100%;">
                             <i class="fas fa-calendar-times" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
-                            <h3 style="color: #666;">${resources.status.noAvailability}</h3>
-                            <p style="color: #888;">${resources.status.noData}</p>
+                            <h3 style="color: #666;">${resources["status.noAvailability"]}</h3>
+                            <p style="color: #888;">${resources["status.noData"]}</p>
                         </div>
                     `;
-                    reservationBtnContainer.style.display = 'none';
-                    return;
-                }
-                
-                // 显示预约按钮
-                reservationBtnContainer.style.display = 'block';
-                
-                // 按日期排序
-                availableDates.sort((a, b) => new Date(a.date) - new Date(b.date));
-                
-                // 为每个可用日期创建卡片
-                availableDates.forEach(dateInfo => {
-                    const dateCard = document.createElement('div');
-                    dateCard.className = 'date-card';
-                    
-                    const visitnoBadges = dateInfo.visitnos
-                        .map(no => `<span class="visitno-badge">${no}</span>`)
-                        .join('');
-                    
-                    dateCard.innerHTML = `
+            reservationBtnContainer.style.display = "none";
+            return;
+          }
+
+          // 표시 예약 버튼
+          reservationBtnContainer.style.display = "block";
+
+          // 날짜별로 정렬
+          availableDates.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+          // 각각의 날짜별로 카드 생성
+          availableDates.forEach((dateInfo) => {
+            const dateCard = document.createElement("div");
+            dateCard.className = "date-card";
+
+            const visitnoBadges = dateInfo.visitnos
+              .map((no) => `<span class="visitno-badge">${no}</span>`)
+              .join("");
+
+            dateCard.innerHTML = `
                         <div class="date-header">
                             <span>${dateInfo.date}</span>
-                            <span>${dateInfo.visitnos.length}${resources.result.available}</span>
+                            <span>${dateInfo.visitnos.length}${resources["result.available"]}</span>
                         </div>
                         <div class="visitno-list">
                             ${visitnoBadges}
                         </div>
                     `;
-                    
-                    resultsContainer.appendChild(dateCard);
-                });
-            }
 
-            // 主查询函数
-            async function fetchAvailableDates() {
-                fetchBtn.disabled = true;
-                loadingElement.style.display = 'block';
-                resultsContainer.innerHTML = '';
-                reservationBtnContainer.style.display = 'none';
-                
-                try {
-                    const dates = getFutureDates(30);
-                    const results = [];
-                    
-                    // 使用Promise.all并发查询所有日期
-                    const promises = dates.map(date => fetchSingleDate(date));
-                    const settledPromises = await Promise.allSettled(promises);
-                    
-                    settledPromises.forEach(result => {
-                        if (result.status === 'fulfilled') {
-                            results.push(result.value);
-                        }
-                    });
-                    
-                    displayResults(results);
-                } catch (error) {
-                    console.error('Error during checking:', error);
-                    resultsContainer.innerHTML = `
+            resultsContainer.appendChild(dateCard);
+          });
+        }
+
+        // 주요 조회 함수
+        async function fetchAvailableDates() {
+          fetchBtn.disabled = true;
+          loadingElement.style.display = "block";
+          resultsContainer.innerHTML = "";
+          reservationBtnContainer.style.display = "none";
+
+          try {
+            const dates = getFutureDates(30);
+            const results = [];
+
+            // 사용Promise.all并发查询所有日期
+            const promises = dates.map((date) => fetchSingleDate(date));
+            const settledPromises = await Promise.allSettled(promises);
+
+            settledPromises.forEach((result) => {
+              if (result.status === "fulfilled") {
+                results.push(result.value);
+              }
+            });
+
+            displayResults(results);
+          } catch (error) {
+            console.error("Error during checking:", error);
+            const resources = i18nResources[currentLanguage];
+            resultsContainer.innerHTML = `
                         <div style="text-align: center; width: 100%; color: var(--danger-color);">
                             <i class="fas fa-exclamation-triangle"></i>
-                            <p>${i18nResources[currentLanguage].status.loading}</p>
+                            <p>${resources["status.loading"]}</p>
                         </div>
                     `;
-                } finally {
-                    fetchBtn.disabled = false;
-                    loadingElement.style.display = 'none';
-                }
-            }
+          } finally {
+            fetchBtn.disabled = false;
+            loadingElement.style.display = "none";
+          }
+        }
 
-            // 绑定按钮点击事件
-            fetchBtn.addEventListener('click', fetchAvailableDates);
-            
-            // 初始化
-            initLanguage();
-        });
+        // 버튼 클릭 이벤트 바인딩
+        fetchBtn.addEventListener("click", fetchAvailableDates);
+
+        // 초기화
+        initLanguage();
+      });
     </script>
-</body>
+  </body>
 </html>
