@@ -64,4 +64,6 @@ This project is licensed under the GPLv3.0 License - see the [LICENSE](LICENSE) 
 
 ---
 
+![Alt](https://repobeats.axiom.co/api/embed/4e8e4bc1cebb2395c567c15b7680fbc9ccd93416.svg "Repobeats analytics image")
+
 **Created by Maicarons**
