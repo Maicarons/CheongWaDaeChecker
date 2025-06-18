@@ -328,7 +328,7 @@
         </div>
 
         <div id="reservation-btn-container" class="reservation-btn-container">
-            <a href="http://opencheongwadae.kr/eng/reservation/form?menuId=MENU003010300000000#" target="_blank" class="btn btn-secondary">
+            <a href="https://opencheongwadae.kr/eng/reservation/form?menuId=MENU003010300000000#" target="_blank" class="btn btn-secondary">
                 <i class="fas fa-external-link-alt"></i> <span data-i18n="button.reserve">Go to Reservation Page</span>
             </a>
         </div>
@@ -475,7 +475,7 @@
             // 查询单个日期的预约情况
             async function fetchSingleDate(date) {
                 try {
-                    const url = `http://opencheongwadae.kr/eng/reservation/previewList?standardDate=${date.dateStr}`;
+                    const url = `https://opencheongwadae.kr/eng/reservation/previewList?standardDate=${date.dateStr}`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
