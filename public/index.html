@@ -368,6 +368,7 @@
 
       <div id="reservation-btn-container" class="reservation-btn-container">
         <a
+          rel="noopener"
           href="https://opencheongwadae.kr/eng/reservation/form?menuId=MENU003010300000000#"
           target="_blank"
           class="btn btn-secondary"
@@ -453,9 +454,9 @@
 
         let currentLanguage = "english";
 
-        // 初始化语言
+        // 초기화 언어
         function initLanguage() {
-          // 检查本地存储中的语言偏好
+          // 검사 로컬 스토리지의 언어 선호도
           const savedLang = localStorage.getItem("blueHouseLang");
           if (savedLang && i18nResources[savedLang]) {
             setLanguage(savedLang);
@@ -464,12 +465,12 @@
           }
         }
 
-        // 设置语言
+        // 설정 언어
         function setLanguage(lang) {
           currentLanguage = lang;
           document.body.className = lang;
 
-          // 更新按钮状态
+          // 업데이트 버튼 상태
           langButtons.forEach((btn) => {
             if (btn.dataset.lang === lang) {
               btn.classList.add("active");
@@ -478,7 +479,7 @@
             }
           });
 
-          // 更新文本内容
+          // 업데이트 텍스트 내용
           const resources = i18nResources[lang];
           document.querySelectorAll("[data-i18n]").forEach((el) => {
             const key = el.getAttribute("data-i18n");
@@ -487,18 +488,18 @@
             }
           });
 
-          // 保存语言偏好
+          // 저장 언어 선호도
           localStorage.setItem("blueHouseLang", lang);
         }
 
-        // 语言切换按钮事件
+        // 언어 전환 버튼 이벤트
         langButtons.forEach((btn) => {
           btn.addEventListener("click", function () {
             setLanguage(this.dataset.lang);
           });
         });
 
-        // 获取未来30天的日期
+        // 가져오기 미래 30일의 날짜
         function getFutureDates(days = 30) {
           const dates = [];
           const today = new Date();
@@ -516,7 +517,7 @@
           return dates;
         }
 
-        // 格式化日期
+        // 날짜 형식화
         function formatDate(date, format) {
           const pad = (num) => num.toString().padStart(2, "0");
 
@@ -526,7 +527,7 @@
             .replace("dd", pad(date.getDate()));
         }
 
-        // 查询单个日期的预约情况
+        // 단일 날짜의 예약 상황 조회
         async function fetchSingleDate(date) {
           try {
             const workerProxy =
@@ -559,12 +560,12 @@
           }
         }
 
-        // 显示结果
+        // 결과 표시
         function displayResults(results) {
-          // 过滤出有可用预约的日期
+          // 사용 가능한 예약이 있는 날짜 필터링
           const availableDates = results.filter((r) => r.visitnos.length > 0);
 
-          // 更新最后更新时间
+          // 마지막 업데이트 시간 업데이트
           const now = new Date();
           const resources = i18nResources[currentLanguage];
           lastUpdatedElement.textContent = `${
@@ -626,7 +627,7 @@
             const dates = getFutureDates(30);
             const results = [];
 
-            // 사용Promise.all并发查询所有日期
+            // 사용Promise.all 동시 조회 모든 날짜
             const promises = dates.map((date) => fetchSingleDate(date));
             const settledPromises = await Promise.allSettled(promises);
 
