@@ -2,8 +2,6 @@
 
 A multilingual web application for checking available reservation times for Cheong Wa Dae (Blue House) tours in South Korea.
 
-
-
 ![screenshot](image.png)
 
 ## Features ✨
@@ -19,7 +17,7 @@ A multilingual web application for checking available reservation times for Cheo
 1. **Access the Tool**:
    - Live Demo: <https://maicarons.github.io/CheongWaDaeChecker/>
    - Or visit <https://cheongwadaechecker.maicarons.cc/>
-   - Or clone this repository and open `index.html` in your browser
+   - Or clone this repository and open [`public/index.html`](public/index.html) in your browser
 
 2. **Check Availability**:
    - Click the "Check Available Times" button
@@ -48,8 +46,10 @@ A multilingual web application for checking available reservation times for Cheo
 
 - Due to browser CORS restrictions, you may need to:
   - Use the live demo version, or
-  - Run a local server (e.g., `python -m http.server`), or
-  - Configure your browser to allow cross-origin requests
+  - Run a local server (e.g., ```bash
+    python -m http.server
+    ```), or
+  - Configure your browser to allow cross-origin requests for API access
 
 ## Contributing 🤝
 
